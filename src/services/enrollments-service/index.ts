@@ -10,9 +10,7 @@ import { AxiosResponse } from "axios";
 async function getAddressFromCEP(cep: string) {
   const result = await request.get(`https://viacep.com.br/ws/${cep}/json/`) as AxiosResponse<ViaCEPAddress>;
 
-  // | AxiosResponse<{erro:boolean}>
-
-  if (!result.data) {
+  if(!result.data || !result.data.uf) {
     throw notFoundError();
   }
 

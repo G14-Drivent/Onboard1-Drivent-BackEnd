@@ -1,5 +1,5 @@
 import { AuthenticatedRequest } from "@/middlewares";
-import enrollmentsService from "@/services/enrollments-service";
+import enrollmentsService, { CreateOrUpdateEnrollmentWithAddress } from "@/services/enrollments-service";
 import { Response } from "express";
 import httpStatus from "http-status";
 
@@ -17,6 +17,9 @@ export async function getEnrollmentByUser(req: AuthenticatedRequest, res: Respon
 
 export async function postCreateOrUpdateEnrollment(req: AuthenticatedRequest, res: Response) {
   try {
+    const { address } = req.body as CreateOrUpdateEnrollmentWithAddress;
+    await enrollmentsService.getAddressFromCEP(address.cep);
+
     await enrollmentsService.createOrUpdateEnrollmentWithAddress({
       ...req.body,
       userId: req.userId,
